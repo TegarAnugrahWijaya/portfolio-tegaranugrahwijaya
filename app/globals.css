@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  --background: #05050c;
+  --foreground: #ffffff;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Mencegah jumping saat scroll karena scrollbar muncul/hilang */
+  scrollbar-gutter: stable;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  color-scheme: dark;
+}
+
+/* Biar pas klik link navbar, section-nya gak ketutup navbar */
+section {
+  scroll-margin-top: 100px;
+}
+
+/* Custom Scrollbar biar makin estetik */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #05050c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4c1d95; /* Warna ungu */
+}
