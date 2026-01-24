@@ -54,11 +54,11 @@ export default function Home() {
   return (
     <main className="relative bg-[#05050c] text-white overflow-hidden selection:bg-purple-500/30 font-sans">
       
-      {/* ===== NAVBAR CLEAN LIQUID EFFECT ===== */}
+      {/* ===== NAVBAR SUPER SMOOTH LIQUID EFFECT ===== */}
       <motion.nav
         initial={{ y: -100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
-        className="fixed top-5 left-1/2 z-50 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full px-2 py-2 flex gap-1 md:gap-2 text-[9px] md:text-xs font-bold shadow-2xl w-[95%] md:w-auto max-w-fit justify-center"
+        className="fixed top-5 left-1/2 z-50 backdrop-blur-2xl bg-white/5 border border-white/10 rounded-full px-2 py-2 flex gap-1 md:gap-2 text-[9px] md:text-xs font-bold shadow-2xl w-[95%] md:w-auto max-w-fit justify-center"
       >
         {navLinks.map((link) => (
           <a 
@@ -68,21 +68,23 @@ export default function Home() {
             className="relative px-4 py-2 uppercase tracking-widest no-underline group"
           >
             {/* Teks Menu */}
-            <span className={`relative z-20 transition-colors duration-300 ${
+            <span className={`relative z-20 transition-colors duration-500 ${
               activeTab === link.name ? "text-white" : "text-gray-400 group-hover:text-white"
             }`}>
               {link.name}
             </span>
             
-            {/* Efek Sliding Glass - layoutId bikin dia meluncur */}
+            {/* Indikator Cair (The Liquid Pill) */}
             {activeTab === link.name && (
               <motion.div
-                layoutId="nav-indicator"
-                className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-md border border-white/20 z-10"
+                layoutId="liquid-pill"
+                layout // Menambah efek stretching/organik
+                className="absolute inset-0 rounded-full bg-white/[0.12] backdrop-blur-md border border-white/20 z-10"
                 transition={{ 
-                  type: "spring", 
-                  stiffness: 350, 
-                  damping: 30 
+                  type: "spring",
+                  stiffness: 400, // Tarikan kuat
+                  damping: 28,    // Rem yang lembut
+                  mass: 0.8       // Terasa lincah dan ringan
                 }}
               />
             )}
