@@ -1,7 +1,8 @@
 "use client"
 
+import { useState } from "react" // Tambahan untuk active tab
 import Image from "next/image"
-import { motion, useScroll, useTransform, Variants } from "framer-motion"
+import { motion, useScroll, useTransform, Variants, AnimatePresence } from "framer-motion"
 import { Linkedin, Instagram, Github, MessageCircle, Mail, Award, FileText, MapPin, ExternalLink } from "lucide-react"
 
 // ===== ANIMATION VARIANTS =====
@@ -25,8 +26,12 @@ const staggerContainer: Variants = {
 export default function Home() {
   const { scrollY } = useScroll()
   const glowY = useTransform(scrollY, [0, 500], [0, -30])
+  
+  // State untuk melacak tab mana yang sedang aktif
+  const [activeTab, setActiveTab] = useState("Home")
 
   const navLinks = [
+    { name: "Home", href: "#" },
     { name: "About", href: "#about" },
     { name: "Skills", href: "#skills" },
     { name: "Certs", href: "#certifications" },
@@ -49,15 +54,32 @@ export default function Home() {
   return (
     <main className="relative bg-[#05050c] text-white overflow-hidden selection:bg-purple-500/30 font-sans">
       
-      {/* ===== NAVBAR ===== */}
+      {/* ===== NAVBAR DENGAN EFEK LIQUID GLASS ===== */}
       <motion.nav
         initial={{ y: -100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
-        className="fixed top-5 left-1/2 z-50 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full px-6 py-3 flex gap-4 md:gap-8 text-[10px] md:text-xs font-bold shadow-2xl w-[92%] md:w-auto max-w-fit justify-center"
+        className="fixed top-5 left-1/2 z-50 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full px-2 py-2 flex gap-1 md:gap-2 text-[9px] md:text-xs font-bold shadow-2xl w-[95%] md:w-auto max-w-fit justify-center"
       >
         {navLinks.map((link) => (
-          <a key={link.name} href={link.href} className="hover:text-purple-400 transition-colors uppercase tracking-widest">
-            {link.name}
+          <a 
+            key={link.name} 
+            href={link.href} 
+            onClick={() => setActiveTab(link.name)}
+            className={`relative px-4 py-2 transition-colors uppercase tracking-widest z-10 ${
+              activeTab === link.name ? "text-white" : "text-gray-400 hover:text-purple-400"
+            }`}
+          >
+            {/* Teks Menu */}
+            <span className="relative z-20">{link.name}</span>
+            
+            {/* Efek Liquid Glass (Background Bergerak) */}
+            {activeTab === link.name && (
+              <motion.div
+                layoutId="active-pill"
+                className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-md border border-white/20 z-0"
+                transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
+              />
+            )}
           </a>
         ))}
       </motion.nav>
@@ -95,7 +117,7 @@ export default function Home() {
               Network Engineer & IT Support yang fokus pada pembangunan infrastruktur jaringan handal dan efisien.
             </p>
             <div className="flex flex-wrap justify-center md:justify-start gap-4">
-              <a href="#contact" className="px-8 py-3 md:px-10 md:py-4 rounded-xl bg-purple-600 font-bold shadow-lg shadow-purple-600/20 active:scale-95 transition-all text-sm flex items-center gap-2">
+              <a href="#contact" onClick={() => setActiveTab("Contact")} className="px-8 py-3 md:px-10 md:py-4 rounded-xl bg-purple-600 font-bold shadow-lg shadow-purple-600/20 active:scale-95 transition-all text-sm flex items-center gap-2">
                 Contact Me
               </a>
               <a href="/cv.pdf" target="_blank" className="px-8 py-3 md:px-10 md:py-4 rounded-xl border border-white/10 bg-white/5 font-bold active:scale-95 transition-all text-sm flex items-center gap-2 hover:bg-white/10">
@@ -107,7 +129,7 @@ export default function Home() {
       </section>
 
       {/* ===== ABOUT ===== */}
-      <section id="about" className="relative z-10 py-24 md:py-32 px-6 max-w-6xl mx-auto border-t border-white/5">
+      <section id="about" className="relative z-10 py-24 md:py-32 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-3xl backdrop-blur-sm">
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-purple-400">About Me</h2>
           <p className="text-gray-300 text-base md:text-xl leading-relaxed">
@@ -117,7 +139,7 @@ export default function Home() {
       </section>
 
       {/* ===== SKILLS ===== */}
-      <section id="skills" className="relative z-10 py-24 px-6 max-w-6xl mx-auto">
+      <section id="skills" className="relative z-10 py-24 px-6 max-w-6xl mx-auto scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Technical Skills</h2>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {skills.map((skill) => (
@@ -129,7 +151,7 @@ export default function Home() {
       </section>
 
       {/* ===== CERTIFICATIONS SECTION ===== */}
-      <section id="certifications" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5">
+      <section id="certifications" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Certifications</h2>
         <motion.div 
           initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant}
@@ -158,7 +180,7 @@ export default function Home() {
       </section>
 
       {/* ===== EXPERIENCE ===== */}
-      <section id="experience" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5">
+      <section id="experience" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest">Experience</h2>
         <div className="grid gap-6 md:gap-8">
           <ExperienceCard 
@@ -175,7 +197,7 @@ export default function Home() {
       </section>
 
       {/* ===== CONTACT ===== */}
-      <section id="contact" className="relative z-10 py-24 px-6 bg-white/[0.01] border-t border-white/5">
+      <section id="contact" className="relative z-10 py-24 px-6 bg-white/[0.01] border-t border-white/5 scroll-mt-24">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 flex flex-col justify-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center md:text-left">Let's Connect</h2>
@@ -203,7 +225,7 @@ export default function Home() {
       {/* ===== FOOTER ===== */}
       <footer className="py-16 px-6 text-center border-t border-white/5 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <p className="text-purple-400 font-bold tracking-[0.2em] uppercase mb-4 text-[10px] md:text-xs italic italic">
+          <p className="text-purple-400 font-bold tracking-[0.2em] uppercase mb-4 text-[10px] md:text-xs italic">
             "Connecting the dots, packet by packet."
           </p>
           <div className="flex items-center justify-center gap-2 text-gray-500 text-[10px] mb-8">
