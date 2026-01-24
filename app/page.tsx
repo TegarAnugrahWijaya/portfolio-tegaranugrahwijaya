@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react" // Tambahan untuk active tab
+import { useState } from "react"
 import Image from "next/image"
-import { motion, useScroll, useTransform, Variants, AnimatePresence } from "framer-motion"
+import { motion, useScroll, useTransform, Variants } from "framer-motion"
 import { Linkedin, Instagram, Github, MessageCircle, Mail, Award, FileText, MapPin, ExternalLink } from "lucide-react"
 
-// ===== ANIMATION VARIANTS =====
+// ===== ANIMATION VARIANTS (ASLI) =====
 const fadeInVariant: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { 
@@ -27,15 +27,13 @@ export default function Home() {
   const { scrollY } = useScroll()
   const glowY = useTransform(scrollY, [0, 500], [0, -30])
   
-  // State untuk melacak tab mana yang sedang aktif
+  // State Navbar (Home, About, Portfolio, Contact)
   const [activeTab, setActiveTab] = useState("Home")
 
   const navLinks = [
     { name: "Home", href: "#" },
     { name: "About", href: "#about" },
-    { name: "Skills", href: "#skills" },
-    { name: "Certs", href: "#certifications" },
-    { name: "Exp", href: "#experience" },
+    { name: "Portfolio", href: "#skills" },
     { name: "Contact", href: "#contact" },
   ]
 
@@ -54,30 +52,27 @@ export default function Home() {
   return (
     <main className="relative bg-[#05050c] text-white overflow-hidden selection:bg-purple-500/30 font-sans">
       
-      {/* ===== NAVBAR DENGAN EFEK LIQUID GLASS ===== */}
+      {/* ===== NAVBAR: LIQUID GLASS RAMPING (FIXED) ===== */}
       <motion.nav
         initial={{ y: -100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
-        className="fixed top-5 left-1/2 z-50 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full px-2 py-2 flex gap-1 md:gap-2 text-[9px] md:text-xs font-bold shadow-2xl w-[95%] md:w-auto max-w-fit justify-center"
+        className="fixed top-5 left-1/2 z-50 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full p-1 flex items-center shadow-2xl w-fit"
       >
         {navLinks.map((link) => (
           <a 
             key={link.name} 
             href={link.href} 
             onClick={() => setActiveTab(link.name)}
-            className={`relative px-4 py-2 transition-colors uppercase tracking-widest z-10 ${
+            className={`relative px-4 py-2 transition-colors uppercase tracking-widest z-10 text-[10px] md:text-xs font-bold ${
               activeTab === link.name ? "text-white" : "text-gray-400 hover:text-purple-400"
             }`}
           >
-            {/* Teks Menu */}
             <span className="relative z-20">{link.name}</span>
-            
-            {/* Efek Liquid Glass (Background Bergerak) */}
             {activeTab === link.name && (
               <motion.div
                 layoutId="active-pill"
                 className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-md border border-white/20 z-0"
-                transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
+                transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
               />
             )}
           </a>
@@ -93,11 +88,7 @@ export default function Home() {
       {/* ===== HERO SECTION ===== */}
       <section className="relative z-10 min-h-screen flex flex-col px-6 max-w-7xl mx-auto pt-32 md:pt-0 justify-start md:justify-center items-center">
         <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-16 items-center w-full">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }} 
-            animate={{ opacity: 1, scale: 1 }} 
-            className="flex justify-center order-first md:order-last"
-          >
+          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="flex justify-center order-first md:order-last">
             <div className="relative w-44 h-44 md:w-96 md:h-96 rounded-full p-1 bg-gradient-to-tr from-purple-500 to-blue-500 shadow-2xl shadow-purple-500/20">
               <div className="relative w-full h-full rounded-full overflow-hidden bg-[#05050c] border-2 border-[#05050c]">
                 <Image src="/fotoprofile.png" alt="Tegar" fill className="object-cover" priority />
@@ -128,7 +119,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== ABOUT ===== */}
+      {/* ===== ABOUT (KONTEN ASLI BALIK) ===== */}
       <section id="about" className="relative z-10 py-24 md:py-32 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-3xl backdrop-blur-sm">
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-purple-400">About Me</h2>
@@ -138,7 +129,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ===== SKILLS ===== */}
+      {/* ===== SKILLS (ASLI) ===== */}
       <section id="skills" className="relative z-10 py-24 px-6 max-w-6xl mx-auto scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Technical Skills</h2>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -150,7 +141,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ===== CERTIFICATIONS SECTION ===== */}
+      {/* ===== CERTIFICATIONS (ASLI BALIK) ===== */}
       <section id="certifications" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Certifications</h2>
         <motion.div 
@@ -158,11 +149,7 @@ export default function Home() {
           className="bg-white/5 border border-white/10 rounded-3xl p-4 md:p-6 max-w-2xl hover:border-purple-500/30 transition-all group"
         >
           <a href="/cert-mtcna.jpg" target="_blank" className="relative block overflow-hidden rounded-xl border border-white/10 mb-6 cursor-zoom-in group/cert">
-            <img 
-              src="/cert-mtcna.jpg" 
-              alt="MTCNA Certificate"
-              className="w-full h-auto block group-hover/cert:scale-[1.02] transition-transform duration-500"
-            />
+            <img src="/cert-mtcna.jpg" alt="MTCNA Certificate" className="w-full h-auto block group-hover/cert:scale-[1.02] transition-transform duration-500" />
             <div className="absolute inset-0 bg-purple-600/0 group-hover/cert:bg-purple-600/5 transition-colors flex items-center justify-center opacity-0 group-hover/cert:opacity-100">
                <div className="bg-black/60 p-3 rounded-full backdrop-blur-md border border-white/20">
                  <ExternalLink size={20} />
@@ -179,9 +166,9 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ===== EXPERIENCE ===== */}
+      {/* ===== EXPERIENCE (CENTER DI HP) ===== */}
       <section id="experience" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
-        <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest">Experience</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Experience</h2>
         <div className="grid gap-6 md:gap-8">
           <ExperienceCard 
             title="Teknisi Komputer" company="Brother In Network" period="2023 – 2025"
@@ -196,22 +183,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== CONTACT ===== */}
+      {/* ===== CONTACT (ASLI) ===== */}
       <section id="contact" className="relative z-10 py-24 px-6 bg-white/[0.01] border-t border-white/5 scroll-mt-24">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 flex flex-col justify-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center md:text-left">Let's Connect</h2>
-            <div className="flex justify-center md:justify-start gap-4 mb-10">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 flex flex-col justify-center items-center md:items-start text-center md:text-left">
+            <h2 className="text-3xl md:text-4xl font-bold mb-8">Let's Connect</h2>
+            <div className="flex gap-4 mb-10">
               {socialMedia.map((social, index) => (
-                <a key={index} href={social.href} target="_blank" rel="noopener noreferrer" className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center transition-all hover:bg-purple-600 hover:scale-110 shadow-xl">
+                <a key={index} href={social.href} target="_blank" className={`w-12 h-12 md:w-16 md:h-16 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center transition-all ${social.color} hover:scale-110 shadow-xl`}>
                   {social.icon}
                 </a>
               ))}
             </div>
-            <div className="flex justify-center md:justify-start">
-              <div className="inline-flex items-center gap-3 text-purple-400 font-bold bg-purple-500/10 px-6 py-4 rounded-xl border border-purple-500/20 text-sm md:text-base">
-                <Mail size={18} /> tegaranw@gmail.com
-              </div>
+            <div className="inline-flex items-center gap-3 text-purple-400 font-bold bg-purple-500/10 px-6 py-4 rounded-xl border border-purple-500/20 text-sm md:text-base">
+              <Mail size={18} /> tegaranw@gmail.com
             </div>
           </motion.div>
           <motion.form initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="space-y-4 bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10">
@@ -222,7 +207,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
+      {/* ===== FOOTER (INFO LOKASI ASLI BALIK) ===== */}
       <footer className="py-16 px-6 text-center border-t border-white/5 relative z-10">
         <div className="max-w-6xl mx-auto">
           <p className="text-purple-400 font-bold tracking-[0.2em] uppercase mb-4 text-[10px] md:text-xs italic">
@@ -243,16 +228,16 @@ export default function Home() {
 function ExperienceCard({ title, company, period, points, images }: { title: string, company: string, period: string, points: string[], images: string[] }) {
   return (
     <div className="p-8 md:p-12 rounded-3xl bg-white/5 border border-white/10 hover:border-purple-500/30 transition-all group">
-      <div className="flex flex-col md:flex-row justify-between md:items-center gap-2 mb-6 text-center md:text-left">
-        <div>
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6 text-center md:text-left">
+        <div className="flex flex-col items-center md:items-start">
           <h3 className="text-xl md:text-3xl font-bold group-hover:text-purple-400 transition-colors">{title}</h3>
           <p className="text-purple-400 text-sm md:text-lg font-medium">{company}</p>
         </div>
-        <span className="text-[10px] md:text-xs font-mono bg-white/5 px-4 py-1.5 rounded-full border border-white/10 w-fit mx-auto md:mx-0">{period}</span>
+        <span className="text-[10px] md:text-xs font-mono bg-white/5 px-4 py-1.5 rounded-full border border-white/10 w-fit">{period}</span>
       </div>
-      <ul className="space-y-3 mb-8">
+      <ul className="space-y-3 mb-8 flex flex-col items-center md:items-start">
         {points.map((pt, i) => (
-          <li key={i} className="text-gray-400 text-sm md:text-lg flex gap-3 items-center justify-center md:justify-start text-center md:text-left">
+          <li key={i} className="text-gray-400 text-sm md:text-lg flex gap-3 items-center text-center md:text-left">
             <span className="w-2 h-2 rounded-full bg-purple-600 shrink-0 hidden md:block" /> {pt}
           </li>
         ))}
