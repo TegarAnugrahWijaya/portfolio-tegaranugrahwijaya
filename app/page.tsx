@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react" // Tambahan untuk active tab
+import { useState } from "react"
 import Image from "next/image"
-import { motion, useScroll, useTransform, Variants, AnimatePresence } from "framer-motion"
+import { motion, useScroll, useTransform, Variants } from "framer-motion"
 import { Linkedin, Instagram, Github, MessageCircle, Mail, Award, FileText, MapPin, ExternalLink } from "lucide-react"
 
 // ===== ANIMATION VARIANTS =====
@@ -27,7 +27,6 @@ export default function Home() {
   const { scrollY } = useScroll()
   const glowY = useTransform(scrollY, [0, 500], [0, -30])
   
-  // State untuk melacak tab mana yang sedang aktif
   const [activeTab, setActiveTab] = useState("Home")
 
   const navLinks = [
@@ -54,7 +53,7 @@ export default function Home() {
   return (
     <main className="relative bg-[#05050c] text-white overflow-hidden selection:bg-purple-500/30 font-sans">
       
-      {/* ===== NAVBAR DENGAN EFEK LIQUID GLASS ===== */}
+      {/* ===== NAVBAR DENGAN EFEK LIQUID GLASS & PULSING GLOW ===== */}
       <motion.nav
         initial={{ y: -100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
@@ -69,15 +68,31 @@ export default function Home() {
               activeTab === link.name ? "text-white" : "text-gray-400 hover:text-purple-400"
             }`}
           >
-            {/* Teks Menu */}
             <span className="relative z-20">{link.name}</span>
             
-            {/* Efek Liquid Glass (Background Bergerak) */}
             {activeTab === link.name && (
               <motion.div
                 layoutId="active-pill"
                 className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-md border border-white/20 z-0"
-                transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
+                
+                // Efek Animasi "Bernapas" & Glow
+                animate={{
+                  backgroundColor: ["rgba(255,255,255,0.1)", "rgba(255,255,255,0.2)", "rgba(255,255,255,0.1)"],
+                  boxShadow: [
+                    "0px 0px 8px rgba(168,85,247,0.2)", 
+                    "0px 0px 20px rgba(168,85,247,0.5)", 
+                    "0px 0px 8px rgba(168,85,247,0.2)"
+                  ],
+                  scale: [1, 1.02, 1],
+                }}
+                transition={{
+                  // Animasi looping-nya
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  // Khusus untuk perpindahan tab (spring tetap ada)
+                  layout: { type: "spring", bounce: 0.25, duration: 0.6 }
+                }}
               />
             )}
           </a>
