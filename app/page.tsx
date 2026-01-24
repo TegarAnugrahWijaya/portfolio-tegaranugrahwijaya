@@ -27,6 +27,7 @@ export default function Home() {
   const { scrollY } = useScroll()
   const glowY = useTransform(scrollY, [0, 500], [0, -30])
   
+  // State untuk kontrol tab aktif
   const [activeTab, setActiveTab] = useState("Home")
 
   const navLinks = [
@@ -53,7 +54,7 @@ export default function Home() {
   return (
     <main className="relative bg-[#05050c] text-white overflow-hidden selection:bg-purple-500/30 font-sans">
       
-      {/* ===== NAVBAR DENGAN EFEK LIQUID GLASS & PULSING GLOW ===== */}
+      {/* ===== NAVBAR CLEAN LIQUID EFFECT ===== */}
       <motion.nav
         initial={{ y: -100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
@@ -64,34 +65,24 @@ export default function Home() {
             key={link.name} 
             href={link.href} 
             onClick={() => setActiveTab(link.name)}
-            className={`relative px-4 py-2 transition-colors uppercase tracking-widest z-10 ${
-              activeTab === link.name ? "text-white" : "text-gray-400 hover:text-purple-400"
-            }`}
+            className="relative px-4 py-2 uppercase tracking-widest no-underline group"
           >
-            <span className="relative z-20">{link.name}</span>
+            {/* Teks Menu */}
+            <span className={`relative z-20 transition-colors duration-300 ${
+              activeTab === link.name ? "text-white" : "text-gray-400 group-hover:text-white"
+            }`}>
+              {link.name}
+            </span>
             
+            {/* Efek Sliding Glass - layoutId bikin dia meluncur */}
             {activeTab === link.name && (
               <motion.div
-                layoutId="active-pill"
-                className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-md border border-white/20 z-0"
-                
-                // Efek Animasi "Bernapas" & Glow
-                animate={{
-                  backgroundColor: ["rgba(255,255,255,0.1)", "rgba(255,255,255,0.2)", "rgba(255,255,255,0.1)"],
-                  boxShadow: [
-                    "0px 0px 8px rgba(168,85,247,0.2)", 
-                    "0px 0px 20px rgba(168,85,247,0.5)", 
-                    "0px 0px 8px rgba(168,85,247,0.2)"
-                  ],
-                  scale: [1, 1.02, 1],
-                }}
-                transition={{
-                  // Animasi looping-nya
-                  duration: 2.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  // Khusus untuk perpindahan tab (spring tetap ada)
-                  layout: { type: "spring", bounce: 0.25, duration: 0.6 }
+                layoutId="nav-indicator"
+                className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-md border border-white/20 z-10"
+                transition={{ 
+                  type: "spring", 
+                  stiffness: 350, 
+                  damping: 30 
                 }}
               />
             )}
