@@ -56,6 +56,7 @@ export default function Home() {
       <motion.nav
         initial={{ y: -100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
+        style={{ willChange: "transform, opacity" }}
         className="fixed top-5 left-1/2 z-50 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full p-1 flex items-center shadow-2xl w-fit"
       >
         {navLinks.map((link) => (
@@ -81,7 +82,7 @@ export default function Home() {
 
       {/* ===== BACKGROUND ===== */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <motion.div style={{ y: glowY }} className="absolute -top-20 -left-20 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-purple-600/10 blur-[80px] md:blur-[160px]" />
+        <motion.div style={{ y: glowY, willChange: "transform" }} className="absolute -top-20 -left-20 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-purple-600/10 blur-[80px] md:blur-[160px]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] md:bg-[size:50px_50px]" />
       </div>
 
@@ -119,7 +120,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== ABOUT (KONTEN ASLI BALIK) ===== */}
+      {/* ===== ABOUT (ASLI) ===== */}
       <section id="about" className="relative z-10 py-24 md:py-32 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-3xl backdrop-blur-sm">
           <h2 className="text-2xl md:text-3xl font-bold mb-6 text-purple-400">About Me</h2>
@@ -141,7 +142,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ===== CERTIFICATIONS (ASLI BALIK) ===== */}
+      {/* ===== CERTIFICATIONS (ASLI) ===== */}
       <section id="certifications" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Certifications</h2>
         <motion.div 
@@ -166,7 +167,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ===== EXPERIENCE (CENTER DI HP) ===== */}
+      {/* ===== EXPERIENCE (ASLI) ===== */}
       <section id="experience" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Experience</h2>
         <div className="grid gap-6 md:gap-8">
@@ -207,7 +208,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== FOOTER (INFO LOKASI ASLI BALIK) ===== */}
+      {/* ===== FOOTER (ASLI) ===== */}
       <footer className="py-16 px-6 text-center border-t border-white/5 relative z-10">
         <div className="max-w-6xl mx-auto">
           <p className="text-purple-400 font-bold tracking-[0.2em] uppercase mb-4 text-[10px] md:text-xs italic">
