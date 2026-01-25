@@ -120,15 +120,55 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== ABOUT (ASLI) ===== */}
-      <section id="about" className="relative z-10 py-24 md:py-32 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-3xl backdrop-blur-sm">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-purple-400">About Me</h2>
-          <p className="text-gray-300 text-base md:text-xl leading-relaxed">
-            Mahasiswa Informatika dan Teknisi Jaringan bersertifikat MTCNA dengan pengalaman praktis dalam troubleshooting hardware, instalasi jaringan Fiber Optic, dan konfigurasi CCTV. Memiliki latar belakang pendidikan vokasi (SMK) Teknik Komputer dan Jaringan yang kuat serta pengalaman kerja sebagai teknisi lapangan. Terampil dalam diagnosa kerusakan komputer dan manajemen jaringan dasar, serta siap berkontribusi dalam tim IT support.
-          </p>
-        </motion.div>
-      </section>
+      {/* ===== ABOUT ME (DENGAN FOTO DI ATAS SAAT DI HP) ===== */}
+<section id="about" className="relative z-10 py-24 md:py-32 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
+  <motion.div 
+    initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} 
+    className="bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-3xl backdrop-blur-sm"
+  >
+    <div className="grid md:grid-cols-5 gap-10 items-center">
+      
+      {/* Kolom Foto - Di HP otomatis di atas (order-first), di Desktop tetep di kiri */}
+      <div className="md:col-span-2 order-first"> 
+        <div className="relative aspect-square max-w-[280px] md:max-w-none mx-auto rounded-2xl overflow-hidden border border-white/10 group">
+          <Image 
+            src="/about.jpeg" 
+            alt="Tegar About" 
+            fill 
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            sizes="(max-width: 768px) 280px, 400px"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#05050c]/40 to-transparent" />
+        </div>
+      </div>
+
+      {/* Kolom Teks - Di HP otomatis di bawah foto */}
+      <div className="md:col-span-3">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-purple-400 text-center md:text-left">About Me</h2>
+        <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-8 text-center md:text-left">
+          Mahasiswa Informatika dan Teknisi Jaringan bersertifikat MTCNA dengan pengalaman praktis dalam troubleshooting hardware, instalasi jaringan Fiber Optic, dan konfigurasi CCTV. Memiliki latar belakang pendidikan vokasi (SMK) Teknik Komputer dan Jaringan yang kuat serta pengalaman kerja sebagai teknisi lapangan. Terampil dalam diagnosa kerusakan komputer dan manajemen jaringan dasar, serta siap berkontribusi dalam tim IT support.
+        </p>
+        
+        {/* Info Tambahan (Foot) */}
+        <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-6 border-t border-white/10">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
+            <MapPin size={14} className="text-purple-400" />
+            <span className="text-[11px] md:text-xs font-medium text-gray-400">Jakarta, ID</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
+            <Award size={14} className="text-blue-400" />
+            <span className="text-[11px] md:text-xs font-medium text-gray-400">MTCNA Certified</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
+            <ExternalLink size={14} className="text-green-400" />
+            <span className="text-[11px] md:text-xs font-medium text-gray-400">Open for Projects</span>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </motion.div>
+</section>
 
       {/* ===== SKILLS (ASLI) ===== */}
       <section id="skills" className="relative z-10 py-24 px-6 max-w-6xl mx-auto scroll-mt-24">
