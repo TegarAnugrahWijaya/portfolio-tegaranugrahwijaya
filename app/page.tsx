@@ -5,7 +5,7 @@ import Image from "next/image"
 import { motion, useScroll, useTransform, Variants } from "framer-motion"
 import { Linkedin, Instagram, Github, MessageCircle, Mail, Award, FileText, MapPin, ExternalLink } from "lucide-react"
 
-// ===== ANIMATION VARIANTS (ASLI) =====
+// ===== ANIMATION VARIANTS =====
 const fadeInVariant: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { 
@@ -27,7 +27,6 @@ export default function Home() {
   const { scrollY } = useScroll()
   const glowY = useTransform(scrollY, [0, 500], [0, -30])
   
-  // State Navbar (Home, About, Portfolio, Contact)
   const [activeTab, setActiveTab] = useState("Home")
 
   const navLinks = [
@@ -52,11 +51,10 @@ export default function Home() {
   return (
     <main className="relative bg-[#05050c] text-white overflow-hidden selection:bg-purple-500/30 font-sans">
       
-      {/* ===== NAVBAR: LIQUID GLASS RAMPING (FIXED) ===== */}
+      {/* ===== NAVBAR ===== */}
       <motion.nav
         initial={{ y: -100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
-        style={{ willChange: "transform, opacity" }}
         className="fixed top-5 left-1/2 z-50 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full p-1 flex items-center shadow-2xl w-fit"
       >
         {navLinks.map((link) => (
@@ -82,7 +80,7 @@ export default function Home() {
 
       {/* ===== BACKGROUND ===== */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <motion.div style={{ y: glowY, willChange: "transform" }} className="absolute -top-20 -left-20 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-purple-600/10 blur-[80px] md:blur-[160px]" />
+        <motion.div style={{ y: glowY }} className="absolute -top-20 -left-20 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-purple-600/10 blur-[80px] md:blur-[160px]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] md:bg-[size:50px_50px]" />
       </div>
 
@@ -99,7 +97,10 @@ export default function Home() {
 
           <motion.div initial="hidden" animate="visible" variants={fadeInVariant} className="text-center md:text-left flex flex-col items-center md:items-start">
             <div className="flex items-center gap-3 mb-6">
-               <span className="w-8 h-[1px] bg-purple-500"></span>
+               <span className="relative flex h-2 w-2">
+                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                 <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+               </span>
                <span className="text-purple-400 text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase">Available for work</span>
             </div>
             <h1 className="text-4xl md:text-8xl font-extrabold leading-[1.1] mb-6 tracking-tight">
@@ -120,69 +121,65 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== ABOUT ME (DENGAN FOTO DI ATAS SAAT DI HP) ===== */}
-<section id="about" className="relative z-10 py-24 md:py-32 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
-  <motion.div 
-    initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} 
-    className="bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-3xl backdrop-blur-sm"
-  >
-    <div className="grid md:grid-cols-5 gap-10 items-center">
-      
-      {/* Kolom Foto - Di HP otomatis di atas (order-first), di Desktop tetep di kiri */}
-      <div className="md:col-span-2 order-first"> 
-        <div className="relative aspect-square max-w-[280px] md:max-w-none mx-auto rounded-2xl overflow-hidden border border-white/10 group">
-          <Image 
-            src="/about.jpeg" 
-            alt="Tegar About" 
-            fill 
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
-            sizes="(max-width: 768px) 280px, 400px"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#05050c]/40 to-transparent" />
-        </div>
-      </div>
+      {/* ===== ABOUT ME ===== */}
+      <section id="about" className="relative z-10 py-24 md:py-32 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
+        <motion.div 
+          initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} 
+          className="bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-3xl backdrop-blur-sm"
+        >
+          <div className="grid md:grid-cols-5 gap-10 items-center">
+            <div className="md:col-span-2 order-first"> 
+              <div className="relative aspect-square max-w-[280px] md:max-w-none mx-auto rounded-2xl overflow-hidden border border-white/10 group">
+                <Image src="/about.jpeg" alt="Tegar About" fill className="object-cover transition-transform duration-500 group-hover:scale-110" sizes="(max-width: 768px) 280px, 400px" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#05050c]/40 to-transparent" />
+              </div>
+            </div>
+            <div className="md:col-span-3">
+              <h2 className="text-2xl md:text-3xl font-bold mb-6 text-purple-400 text-center md:text-left">About Me</h2>
+              <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-8 text-center md:text-left">
+                Mahasiswa Informatika dan Teknisi Jaringan bersertifikat MTCNA dengan pengalaman praktis dalam troubleshooting hardware, instalasi jaringan Fiber Optic, dan konfigurasi CCTV. Memiliki latar belakang pendidikan vokasi (SMK) Teknik Komputer dan Jaringan yang kuat serta pengalaman kerja sebagai teknisi lapangan.
+              </p>
+              <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-6 border-t border-white/10">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
+                  <MapPin size={14} className="text-purple-400" />
+                  <span className="text-[11px] md:text-xs font-medium text-gray-400">Jakarta, ID</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
+                  <Award size={14} className="text-blue-400" />
+                  <span className="text-[11px] md:text-xs font-medium text-gray-400">MTCNA Certified</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
+                  <ExternalLink size={14} className="text-green-400" />
+                  <span className="text-[11px] md:text-xs font-medium text-gray-400">Open for Projects</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
 
-      {/* Kolom Teks - Di HP otomatis di bawah foto */}
-      <div className="md:col-span-3">
-        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-purple-400 text-center md:text-left">About Me</h2>
-        <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-8 text-center md:text-left">
-          Mahasiswa Informatika dan Teknisi Jaringan bersertifikat MTCNA dengan pengalaman praktis dalam troubleshooting hardware, instalasi jaringan Fiber Optic, dan konfigurasi CCTV. Memiliki latar belakang pendidikan vokasi (SMK) Teknik Komputer dan Jaringan yang kuat serta pengalaman kerja sebagai teknisi lapangan. Terampil dalam diagnosa kerusakan komputer dan manajemen jaringan dasar, serta siap berkontribusi dalam tim IT support.
-        </p>
-        
-        {/* Info Tambahan (Foot) */}
-        <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-6 border-t border-white/10">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-            <MapPin size={14} className="text-purple-400" />
-            <span className="text-[11px] md:text-xs font-medium text-gray-400">Jakarta, ID</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-            <Award size={14} className="text-blue-400" />
-            <span className="text-[11px] md:text-xs font-medium text-gray-400">MTCNA Certified</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-            <ExternalLink size={14} className="text-green-400" />
-            <span className="text-[11px] md:text-xs font-medium text-gray-400">Open for Projects</span>
-          </div>
-        </div>
-      </div>
-      
-    </div>
-  </motion.div>
-</section>
-
-      {/* ===== SKILLS (ASLI) ===== */}
+      {/* ===== SKILLS ===== */}
       <section id="skills" className="relative z-10 py-24 px-6 max-w-6xl mx-auto scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Technical Skills</h2>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {skills.map((skill) => (
-            <motion.div key={skill} variants={fadeInVariant} className="rounded-2xl bg-white/5 border border-white/10 p-6 md:p-10 flex items-center justify-center text-center font-bold text-sm md:text-base transition-all hover:bg-white/10 hover:border-purple-500/50">
+            <motion.div 
+              key={skill} 
+              variants={fadeInVariant}
+              whileHover={{ 
+                scale: 1.05, 
+                boxShadow: "0px 0px 25px rgba(168, 85, 247, 0.2)",
+                borderColor: "rgba(168, 85, 247, 0.5)"
+              }}
+              className="cursor-default rounded-2xl bg-white/5 border border-white/10 p-6 md:p-10 flex items-center justify-center text-center font-bold text-sm md:text-base transition-colors hover:bg-white/10"
+            >
               {skill}
             </motion.div>
           ))}
         </motion.div>
       </section>
 
-      {/* ===== CERTIFICATIONS (ASLI) ===== */}
+      {/* ===== CERTIFICATIONS ===== */}
       <section id="certifications" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Certifications</h2>
         <motion.div 
@@ -207,7 +204,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ===== EXPERIENCE (ASLI) ===== */}
+      {/* ===== EXPERIENCE ===== */}
       <section id="experience" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Experience</h2>
         <div className="grid gap-6 md:gap-8">
@@ -224,7 +221,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== CONTACT (ASLI) ===== */}
+      {/* ===== CONTACT ===== */}
       <section id="contact" className="relative z-10 py-24 px-6 bg-white/[0.01] border-t border-white/5 scroll-mt-24">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 flex flex-col justify-center items-center md:items-start text-center md:text-left">
@@ -248,7 +245,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== FOOTER (ASLI) ===== */}
+      {/* ===== FOOTER ===== */}
       <footer className="py-16 px-6 text-center border-t border-white/5 relative z-10">
         <div className="max-w-6xl mx-auto">
           <p className="text-purple-400 font-bold tracking-[0.2em] uppercase mb-4 text-[10px] md:text-xs italic">
@@ -269,20 +266,28 @@ export default function Home() {
 function ExperienceCard({ title, company, period, points, images }: { title: string, company: string, period: string, points: string[], images: string[] }) {
   return (
     <div className="p-8 md:p-12 rounded-3xl bg-white/5 border border-white/10 hover:border-purple-500/30 transition-all group">
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6 text-center md:text-left">
+      {/* Container Header: Flex col di HP (gap 4), Flex row di Desktop */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 md:mb-6 text-center md:text-left">
         <div className="flex flex-col items-center md:items-start">
           <h3 className="text-xl md:text-3xl font-bold group-hover:text-purple-400 transition-colors">{title}</h3>
           <p className="text-purple-400 text-sm md:text-lg font-medium">{company}</p>
         </div>
-        <span className="text-[10px] md:text-xs font-mono bg-white/5 px-4 py-1.5 rounded-full border border-white/10 w-fit">{period}</span>
+        
+        {/* Periode: Simetris di tengah saat mode HP karena mb-0 pada container header dan mt-0 pada list */}
+        <span className="text-[10px] md:text-xs font-mono bg-white/5 px-4 py-1.5 rounded-full border border-white/10 w-fit">
+          {period}
+        </span>
       </div>
-      <ul className="space-y-3 mb-8 flex flex-col items-center md:items-start">
+
+      {/* List Poin: mt-4 di HP biar ada jarak simetris dengan pill tahun di atasnya */}
+      <ul className="mt-4 md:mt-0 space-y-3 mb-8 flex flex-col items-center md:items-start">
         {points.map((pt, i) => (
           <li key={i} className="text-gray-400 text-sm md:text-lg flex gap-3 items-center text-center md:text-left">
             <span className="w-2 h-2 rounded-full bg-purple-600 shrink-0 hidden md:block" /> {pt}
           </li>
         ))}
       </ul>
+
       <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8">
         {images.map((img, index) => (
           <div key={index} className="relative aspect-square rounded-xl overflow-hidden border border-white/10 bg-white/5 group/img">
