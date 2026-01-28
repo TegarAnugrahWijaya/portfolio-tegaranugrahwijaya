@@ -5,7 +5,7 @@ import Image from "next/image"
 import { motion, useScroll, useTransform, Variants } from "framer-motion"
 import { Linkedin, Instagram, Github, MessageCircle, Mail, Award, FileText, MapPin, ExternalLink } from "lucide-react"
 
-// ===== ANIMATION VARIANTS =====
+// ===== ANIMATION VARIANTS (ASLI) =====
 const fadeInVariant: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { 
@@ -55,6 +55,7 @@ export default function Home() {
       <motion.nav
         initial={{ y: -100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
+        style={{ willChange: "transform, opacity" }}
         className="fixed top-5 left-1/2 z-50 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full p-1 flex items-center shadow-2xl w-fit"
       >
         {navLinks.map((link) => (
@@ -80,7 +81,7 @@ export default function Home() {
 
       {/* ===== BACKGROUND ===== */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <motion.div style={{ y: glowY }} className="absolute -top-20 -left-20 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-purple-600/10 blur-[80px] md:blur-[160px]" />
+        <motion.div style={{ y: glowY, willChange: "transform" }} className="absolute -top-20 -left-20 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-purple-600/10 blur-[80px] md:blur-[160px]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] md:bg-[size:50px_50px]" />
       </div>
 
@@ -96,6 +97,7 @@ export default function Home() {
           </motion.div>
 
           <motion.div initial="hidden" animate="visible" variants={fadeInVariant} className="text-center md:text-left flex flex-col items-center md:items-start">
+            {/* POINT 1: LIVE STATUS REPLACING STATIC LINE */}
             <div className="flex items-center gap-3 mb-6">
                <span className="relative flex h-2 w-2">
                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
@@ -103,6 +105,7 @@ export default function Home() {
                </span>
                <span className="text-purple-400 text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase">Available for work</span>
             </div>
+            
             <h1 className="text-4xl md:text-8xl font-extrabold leading-[1.1] mb-6 tracking-tight">
               Tegar <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Anugrah</span><br className="hidden md:block" /> Wijaya
             </h1>
@@ -123,10 +126,7 @@ export default function Home() {
 
       {/* ===== ABOUT ME ===== */}
       <section id="about" className="relative z-10 py-24 md:py-32 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
-        <motion.div 
-          initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} 
-          className="bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-3xl backdrop-blur-sm"
-        >
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-3xl backdrop-blur-sm">
           <div className="grid md:grid-cols-5 gap-10 items-center">
             <div className="md:col-span-2 order-first"> 
               <div className="relative aspect-square max-w-[280px] md:max-w-none mx-auto rounded-2xl overflow-hidden border border-white/10 group">
@@ -137,7 +137,7 @@ export default function Home() {
             <div className="md:col-span-3">
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-purple-400 text-center md:text-left">About Me</h2>
               <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-8 text-center md:text-left">
-                Mahasiswa Informatika dan Teknisi Jaringan bersertifikat MTCNA dengan pengalaman praktis dalam troubleshooting hardware, instalasi jaringan Fiber Optic, dan konfigurasi CCTV. Memiliki latar belakang pendidikan vokasi (SMK) Teknik Komputer dan Jaringan yang kuat serta pengalaman kerja sebagai teknisi lapangan.
+                Mahasiswa Informatika dan Teknisi Jaringan bersertifikat MTCNA dengan pengalaman praktis dalam troubleshooting hardware, instalasi jaringan Fiber Optic, dan konfigurasi CCTV. Memiliki latar belakang pendidikan vokasi (SMK) Teknik Komputer dan Jaringan yang kuat serta pengalaman kerja sebagai teknisi lapangan. Terampil dalam diagnosa kerusakan komputer dan manajemen jaringan dasar, serta siap berkontribusi dalam tim IT support.
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-6 border-t border-white/10">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
@@ -158,7 +158,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ===== SKILLS ===== */}
+      {/* ===== SKILLS (POINT 2: GLOW HOVER ADDED) ===== */}
       <section id="skills" className="relative z-10 py-24 px-6 max-w-6xl mx-auto scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Technical Skills</h2>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -168,10 +168,10 @@ export default function Home() {
               variants={fadeInVariant}
               whileHover={{ 
                 scale: 1.05, 
-                boxShadow: "0px 0px 25px rgba(168, 85, 247, 0.2)",
-                borderColor: "rgba(168, 85, 247, 0.5)"
+                boxShadow: "0px 0px 20px rgba(168, 85, 247, 0.15)",
+                borderColor: "rgba(168, 85, 247, 0.4)"
               }}
-              className="cursor-default rounded-2xl bg-white/5 border border-white/10 p-6 md:p-10 flex items-center justify-center text-center font-bold text-sm md:text-base transition-colors hover:bg-white/10"
+              className="rounded-2xl bg-white/5 border border-white/10 p-6 md:p-10 flex items-center justify-center text-center font-bold text-sm md:text-base transition-all hover:bg-white/10"
             >
               {skill}
             </motion.div>
@@ -182,10 +182,7 @@ export default function Home() {
       {/* ===== CERTIFICATIONS ===== */}
       <section id="certifications" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Certifications</h2>
-        <motion.div 
-          initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant}
-          className="bg-white/5 border border-white/10 rounded-3xl p-4 md:p-6 max-w-2xl hover:border-purple-500/30 transition-all group"
-        >
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/5 border border-white/10 rounded-3xl p-4 md:p-6 max-w-2xl hover:border-purple-500/30 transition-all group">
           <a href="/cert-mtcna.jpg" target="_blank" className="relative block overflow-hidden rounded-xl border border-white/10 mb-6 cursor-zoom-in group/cert">
             <img src="/cert-mtcna.jpg" alt="MTCNA Certificate" className="w-full h-auto block group-hover/cert:scale-[1.02] transition-transform duration-500" />
             <div className="absolute inset-0 bg-purple-600/0 group-hover/cert:bg-purple-600/5 transition-colors flex items-center justify-center opacity-0 group-hover/cert:opacity-100">
@@ -208,16 +205,8 @@ export default function Home() {
       <section id="experience" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Experience</h2>
         <div className="grid gap-6 md:gap-8">
-          <ExperienceCard 
-            title="Teknisi Komputer" company="Brother In Network" period="2023 – 2025"
-            points={["Troubleshooting PC & Laptop", "Instalasi OS", "Hardware Maintenance"]}
-            images={["/exp1-1.jpg", "/exp1-2.jpg", "/exp1-3.jpg"]}
-          />
-          <ExperienceCard 
-            title="Teknisi Lapangan" company="PT. Lintas Jaringan Nusantara" period="2024"
-            points={["Instalasi Fiber Optic", "Konfigurasi CCTV", "Troubleshoot Jaringan"]}
-            images={["/exp2-1.jpg", "/exp2-2.jpg", "/exp2-3.jpg"]}
-          />
+          <ExperienceCard title="Teknisi Komputer" company="Brother In Network" period="2023 – 2025" points={["Troubleshooting PC & Laptop", "Instalasi OS", "Hardware Maintenance"]} images={["/exp1-1.jpg", "/exp1-2.jpg", "/exp1-3.jpg"]} />
+          <ExperienceCard title="Teknisi Lapangan" company="PT. Lintas Jaringan Nusantara" period="2024" points={["Instalasi Fiber Optic", "Konfigurasi CCTV", "Troubleshoot Jaringan"]} images={["/exp2-1.jpg", "/exp2-2.jpg", "/exp2-3.jpg"]} />
         </div>
       </section>
 
@@ -266,20 +255,15 @@ export default function Home() {
 function ExperienceCard({ title, company, period, points, images }: { title: string, company: string, period: string, points: string[], images: string[] }) {
   return (
     <div className="p-8 md:p-12 rounded-3xl bg-white/5 border border-white/10 hover:border-purple-500/30 transition-all group">
-      {/* Container Header: Flex col di HP (gap 4), Flex row di Desktop */}
+      {/* HEADER: DIBUAT MB-4 DI HP BIAR SIMETRIS */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 md:mb-6 text-center md:text-left">
         <div className="flex flex-col items-center md:items-start">
           <h3 className="text-xl md:text-3xl font-bold group-hover:text-purple-400 transition-colors">{title}</h3>
           <p className="text-purple-400 text-sm md:text-lg font-medium">{company}</p>
         </div>
-        
-        {/* Periode: Simetris di tengah saat mode HP karena mb-0 pada container header dan mt-0 pada list */}
-        <span className="text-[10px] md:text-xs font-mono bg-white/5 px-4 py-1.5 rounded-full border border-white/10 w-fit">
-          {period}
-        </span>
+        <span className="text-[10px] md:text-xs font-mono bg-white/5 px-4 py-1.5 rounded-full border border-white/10 w-fit">{period}</span>
       </div>
-
-      {/* List Poin: mt-4 di HP biar ada jarak simetris dengan pill tahun di atasnya */}
+      {/* LIST: DIBUAT MT-4 DI HP BIAR SIMETRIS DENGAN TAHUN DI ATASNYA */}
       <ul className="mt-4 md:mt-0 space-y-3 mb-8 flex flex-col items-center md:items-start">
         {points.map((pt, i) => (
           <li key={i} className="text-gray-400 text-sm md:text-lg flex gap-3 items-center text-center md:text-left">
@@ -287,7 +271,6 @@ function ExperienceCard({ title, company, period, points, images }: { title: str
           </li>
         ))}
       </ul>
-
       <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8">
         {images.map((img, index) => (
           <div key={index} className="relative aspect-square rounded-xl overflow-hidden border border-white/10 bg-white/5 group/img">
