@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { motion, useScroll, useTransform, Variants } from "framer-motion"
-import { Linkedin, Instagram, Github, MessageCircle, Mail, Award, FileText, MapPin, ExternalLink } from "lucide-react"
+import { Linkedin, Instagram, Github, MessageCircle, Mail, Award, FileText, MapPin, ExternalLink } from "lucide-center"
+import { Linkedin as LucideLinkedin, Instagram as LucideInstagram, Github as LucideGithub, MessageCircle as LucideMessage, Mail as LucideMail, Award as LucideAward, FileText as LucideFile, MapPin as LucideMap, ExternalLink as LucideLink } from "lucide-react"
 
-// ===== ANIMATION VARIANTS (ASLI) =====
+// ===== ANIMATION VARIANTS =====
 const fadeInVariant: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { 
@@ -28,6 +29,53 @@ export default function Home() {
   const glowY = useTransform(scrollY, [0, 500], [0, -30])
   
   const [activeTab, setActiveTab] = useState("Home")
+  const isScrollingRef = useRef(false)
+
+  // ===== FIX TERBARU: PRECISION SCROLL DETECTION =====
+  useEffect(() => {
+    const sections = document.querySelectorAll("section[id]");
+    
+    const observerOptions = {
+      root: null,
+      // rootMargin "-20% 0px -70% 0px" artinya dia fokus deteksi di area atas-tengah layar
+      rootMargin: "-20% 0px -70% 0px", 
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      if (isScrollingRef.current) return;
+
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute("id");
+          if (id === "about") setActiveTab("About");
+          else if (id === "skills") setActiveTab("Portfolio");
+          else if (id === "contact") setActiveTab("Contact");
+        }
+      });
+    }, observerOptions);
+
+    const handleHomeScroll = () => {
+      if (isScrollingRef.current) return;
+      if (window.scrollY < 150) setActiveTab("Home");
+    };
+
+    sections.forEach((section) => observer.observe(section));
+    window.addEventListener("scroll", handleHomeScroll);
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+      window.removeEventListener("scroll", handleHomeScroll);
+    };
+  }, []);
+
+  const handleNavClick = (name: string) => {
+    setActiveTab(name);
+    isScrollingRef.current = true;
+    setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 1000); // Lock 1 detik biar scroll animasi selesai dulu
+  }
 
   const navLinks = [
     { name: "Home", href: "#" },
@@ -42,27 +90,26 @@ export default function Home() {
   ]
 
   const socialMedia = [
-    { icon: <Linkedin size={18} />, href: "https://www.linkedin.com/in/tegar-anugrah-wijaya-606922346/", color: "hover:bg-blue-600" },
-    { icon: <Instagram size={18} />, href: "https://www.instagram.com/tegarannn", color: "hover:bg-pink-600" },
-    { icon: <MessageCircle size={18} />, href: "https://tiktok.com/@tegaranw", color: "hover:bg-slate-800" },
-    { icon: <Github size={18} />, href: "https://github.com/TegarAnugrahWijayah", color: "hover:bg-gray-700" },
+    { icon: <LucideLinkedin size={18} />, href: "https://www.linkedin.com/in/tegar-anugrah-wijaya-606922346/", color: "hover:bg-blue-600" },
+    { icon: <LucideInstagram size={18} />, href: "https://www.instagram.com/tegarannn", color: "hover:bg-pink-600" },
+    { icon: <LucideMessage size={18} />, href: "https://tiktok.com/@tegaranw", color: "hover:bg-slate-800" },
+    { icon: <LucideGithub size={18} />, href: "https://github.com/TegarAnugrahWijayah", color: "hover:bg-gray-700" },
   ]
 
   return (
-    <main className="relative bg-[#05050c] text-white overflow-hidden selection:bg-purple-500/30 font-sans">
+    <main className="relative bg-[#05050c] text-white overflow-hidden selection:bg-purple-500/30 font-sans scroll-smooth">
       
       {/* ===== NAVBAR ===== */}
       <motion.nav
         initial={{ y: -100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
-        style={{ willChange: "transform, opacity" }}
         className="fixed top-5 left-1/2 z-50 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full p-1 flex items-center shadow-2xl w-fit"
       >
         {navLinks.map((link) => (
           <a 
             key={link.name} 
             href={link.href} 
-            onClick={() => setActiveTab(link.name)}
+            onClick={() => handleNavClick(link.name)}
             className={`relative px-4 py-2 transition-colors uppercase tracking-widest z-10 text-[10px] md:text-xs font-bold ${
               activeTab === link.name ? "text-white" : "text-gray-400 hover:text-purple-400"
             }`}
@@ -81,7 +128,7 @@ export default function Home() {
 
       {/* ===== BACKGROUND ===== */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <motion.div style={{ y: glowY, willChange: "transform" }} className="absolute -top-20 -left-20 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-purple-600/10 blur-[80px] md:blur-[160px]" />
+        <motion.div style={{ y: glowY }} className="absolute -top-20 -left-20 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-purple-600/10 blur-[80px] md:blur-[160px]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] md:bg-[size:50px_50px]" />
       </div>
 
@@ -97,7 +144,6 @@ export default function Home() {
           </motion.div>
 
           <motion.div initial="hidden" animate="visible" variants={fadeInVariant} className="text-center md:text-left flex flex-col items-center md:items-start">
-            {/* POINT 1: LIVE STATUS REPLACING STATIC LINE */}
             <div className="flex items-center gap-3 mb-6">
                <span className="relative flex h-2 w-2">
                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
@@ -113,11 +159,11 @@ export default function Home() {
               Network Engineer & IT Support yang fokus pada pembangunan infrastruktur jaringan handal dan efisien.
             </p>
             <div className="flex flex-wrap justify-center md:justify-start gap-4">
-              <a href="#contact" onClick={() => setActiveTab("Contact")} className="px-8 py-3 md:px-10 md:py-4 rounded-xl bg-purple-600 font-bold shadow-lg shadow-purple-600/20 active:scale-95 transition-all text-sm flex items-center gap-2">
+              <a href="#contact" onClick={() => handleNavClick("Contact")} className="px-8 py-3 md:px-10 md:py-4 rounded-xl bg-purple-600 font-bold shadow-lg shadow-purple-600/20 active:scale-95 transition-all text-sm flex items-center gap-2">
                 Contact Me
               </a>
               <a href="/cv.pdf" target="_blank" className="px-8 py-3 md:px-10 md:py-4 rounded-xl border border-white/10 bg-white/5 font-bold active:scale-95 transition-all text-sm flex items-center gap-2 hover:bg-white/10">
-                <FileText size={18} /> Download CV
+                <LucideFile size={18} /> Download CV
               </a>
             </div>
           </motion.div>
@@ -141,15 +187,15 @@ export default function Home() {
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-6 border-t border-white/10">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-                  <MapPin size={14} className="text-purple-400" />
+                  <LucideMap size={14} className="text-purple-400" />
                   <span className="text-[11px] md:text-xs font-medium text-gray-400">Jakarta, ID</span>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-                  <Award size={14} className="text-blue-400" />
+                  <LucideAward size={14} className="text-blue-400" />
                   <span className="text-[11px] md:text-xs font-medium text-gray-400">MTCNA Certified</span>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-                  <ExternalLink size={14} className="text-green-400" />
+                  <LucideLink size={14} className="text-green-400" />
                   <span className="text-[11px] md:text-xs font-medium text-gray-400">Open for Projects</span>
                 </div>
               </div>
@@ -158,7 +204,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ===== SKILLS (POINT 2: GLOW HOVER ADDED) ===== */}
+      {/* ===== SKILLS / PORTFOLIO ===== */}
       <section id="skills" className="relative z-10 py-24 px-6 max-w-6xl mx-auto scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Technical Skills</h2>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -166,12 +212,8 @@ export default function Home() {
             <motion.div 
               key={skill} 
               variants={fadeInVariant}
-              whileHover={{ 
-                scale: 1.05, 
-                boxShadow: "0px 0px 20px rgba(168, 85, 247, 0.15)",
-                borderColor: "rgba(168, 85, 247, 0.4)"
-              }}
-              className="rounded-2xl bg-white/5 border border-white/10 p-6 md:p-10 flex items-center justify-center text-center font-bold text-sm md:text-base transition-all hover:bg-white/10"
+              whileHover={{ scale: 1.05 }}
+              className="rounded-2xl bg-white/5 border border-white/10 p-6 md:p-10 flex items-center justify-center text-center font-bold text-sm md:text-base transition-all hover:bg-white/10 hover:border-purple-500/30"
             >
               {skill}
             </motion.div>
@@ -179,29 +221,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ===== CERTIFICATIONS ===== */}
-      <section id="certifications" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
-        <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Certifications</h2>
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/5 border border-white/10 rounded-3xl p-4 md:p-6 max-w-2xl hover:border-purple-500/30 transition-all group">
-          <a href="/cert-mtcna.jpg" target="_blank" className="relative block overflow-hidden rounded-xl border border-white/10 mb-6 cursor-zoom-in group/cert">
-            <img src="/cert-mtcna.jpg" alt="MTCNA Certificate" className="w-full h-auto block group-hover/cert:scale-[1.02] transition-transform duration-500" />
-            <div className="absolute inset-0 bg-purple-600/0 group-hover/cert:bg-purple-600/5 transition-colors flex items-center justify-center opacity-0 group-hover/cert:opacity-100">
-               <div className="bg-black/60 p-3 rounded-full backdrop-blur-md border border-white/20">
-                 <ExternalLink size={20} />
-               </div>
-            </div>
-          </a>
-          <div className="px-2">
-            <div className="flex items-center gap-3 mb-2">
-              <Award className="text-purple-500" size={24} />
-              <h3 className="text-xl md:text-2xl font-bold text-white uppercase tracking-tight">MikroTik Certified Network Associate</h3>
-            </div>
-            <p className="text-purple-400 font-medium ">Issued by MikroTik • MikroTik Academy</p>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* ===== EXPERIENCE ===== */}
+      {/* (Sections Experience & Contact sama seperti sebelumnya) */}
       <section id="experience" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Experience</h2>
         <div className="grid gap-6 md:gap-8">
@@ -210,7 +230,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== CONTACT ===== */}
       <section id="contact" className="relative z-10 py-24 px-6 bg-white/[0.01] border-t border-white/5 scroll-mt-24">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 flex flex-col justify-center items-center md:items-start text-center md:text-left">
@@ -223,7 +242,7 @@ export default function Home() {
               ))}
             </div>
             <div className="inline-flex items-center gap-3 text-purple-400 font-bold bg-purple-500/10 px-6 py-4 rounded-xl border border-purple-500/20 text-sm md:text-base">
-              <Mail size={18} /> tegaranw@gmail.com
+              <LucideMail size={18} /> tegaranw@gmail.com
             </div>
           </motion.div>
           <motion.form initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="space-y-4 bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10">
@@ -234,18 +253,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
       <footer className="py-16 px-6 text-center border-t border-white/5 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <p className="text-purple-400 font-bold tracking-[0.2em] uppercase mb-4 text-[10px] md:text-xs italic">
-            "Connecting the dots, packet by packet."
-          </p>
-          <div className="flex items-center justify-center gap-2 text-gray-500 text-[10px] mb-8">
-            <MapPin size={12} /> Jakarta, Indonesia
-          </div>
-          <div className="text-gray-600 text-[10px] tracking-[0.3em] uppercase">
-            © {new Date().getFullYear()} Tegar Anugrah Wijaya
-          </div>
+        <div className="max-w-6xl mx-auto text-gray-600 text-[10px] tracking-[0.3em] uppercase">
+          © {new Date().getFullYear()} Tegar Anugrah Wijaya
         </div>
       </footer>
     </main>
@@ -255,7 +265,6 @@ export default function Home() {
 function ExperienceCard({ title, company, period, points, images }: { title: string, company: string, period: string, points: string[], images: string[] }) {
   return (
     <div className="p-8 md:p-12 rounded-3xl bg-white/5 border border-white/10 hover:border-purple-500/30 transition-all group">
-      {/* HEADER: DIBUAT MB-4 DI HP BIAR SIMETRIS */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4 md:mb-6 text-center md:text-left">
         <div className="flex flex-col items-center md:items-start">
           <h3 className="text-xl md:text-3xl font-bold group-hover:text-purple-400 transition-colors">{title}</h3>
@@ -263,7 +272,6 @@ function ExperienceCard({ title, company, period, points, images }: { title: str
         </div>
         <span className="text-[10px] md:text-xs font-mono bg-white/5 px-4 py-1.5 rounded-full border border-white/10 w-fit">{period}</span>
       </div>
-      {/* LIST: DIBUAT MT-4 DI HP BIAR SIMETRIS DENGAN TAHUN DI ATASNYA */}
       <ul className="mt-4 md:mt-0 space-y-3 mb-8 flex flex-col items-center md:items-start">
         {points.map((pt, i) => (
           <li key={i} className="text-gray-400 text-sm md:text-lg flex gap-3 items-center text-center md:text-left">
@@ -274,7 +282,7 @@ function ExperienceCard({ title, company, period, points, images }: { title: str
       <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8">
         {images.map((img, index) => (
           <div key={index} className="relative aspect-square rounded-xl overflow-hidden border border-white/10 bg-white/5 group/img">
-            <Image src={img} alt={`${title} doc ${index}`} fill className="object-cover group-hover/img:scale-110 transition-transform duration-500" />
+            <Image src={img} alt={`${title} doc ${index}`} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
           </div>
         ))}
       </div>
