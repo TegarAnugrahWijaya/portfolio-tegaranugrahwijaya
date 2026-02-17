@@ -3,8 +3,17 @@
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { motion, useScroll, useTransform, Variants } from "framer-motion"
-import { Linkedin, Instagram, Github, MessageCircle, Mail, Award, FileText, MapPin, ExternalLink } from "lucide-center"
-import { Linkedin as LucideLinkedin, Instagram as LucideInstagram, Github as LucideGithub, MessageCircle as LucideMessage, Mail as LucideMail, Award as LucideAward, FileText as LucideFile, MapPin as LucideMap, ExternalLink as LucideLink } from "lucide-react"
+import { 
+  Linkedin, 
+  Instagram, 
+  Github, 
+  MessageCircle, 
+  Mail, 
+  Award, 
+  FileText, 
+  MapPin, 
+  ExternalLink 
+} from "lucide-react"
 
 // ===== ANIMATION VARIANTS =====
 const fadeInVariant: Variants = {
@@ -31,33 +40,27 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("Home")
   const isScrollingRef = useRef(false)
 
-  // ===== FIX TERBARU: PRECISION SCROLL DETECTION =====
+  // ===== AUTO UPDATE NAVBAR ON SCROLL =====
   useEffect(() => {
     const sections = document.querySelectorAll("section[id]");
     
-    const observerOptions = {
-      root: null,
-      // rootMargin "-20% 0px -70% 0px" artinya dia fokus deteksi di area atas-tengah layar
-      rootMargin: "-20% 0px -70% 0px", 
-      threshold: 0
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      if (isScrollingRef.current) return;
-
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.getAttribute("id");
-          if (id === "about") setActiveTab("About");
-          else if (id === "skills") setActiveTab("Portfolio");
-          else if (id === "contact") setActiveTab("Contact");
-        }
-      });
-    }, observerOptions);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (isScrollingRef.current) return;
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute("id");
+            if (id === "about") setActiveTab("About");
+            else if (id === "skills") setActiveTab("Portfolio");
+            else if (id === "contact") setActiveTab("Contact");
+          }
+        });
+      },
+      { rootMargin: "-30% 0px -60% 0px", threshold: 0 }
+    );
 
     const handleHomeScroll = () => {
-      if (isScrollingRef.current) return;
-      if (window.scrollY < 150) setActiveTab("Home");
+      if (!isScrollingRef.current && window.scrollY < 150) setActiveTab("Home");
     };
 
     sections.forEach((section) => observer.observe(section));
@@ -72,9 +75,7 @@ export default function Home() {
   const handleNavClick = (name: string) => {
     setActiveTab(name);
     isScrollingRef.current = true;
-    setTimeout(() => {
-      isScrollingRef.current = false;
-    }, 1000); // Lock 1 detik biar scroll animasi selesai dulu
+    setTimeout(() => { isScrollingRef.current = false; }, 800);
   }
 
   const navLinks = [
@@ -90,10 +91,10 @@ export default function Home() {
   ]
 
   const socialMedia = [
-    { icon: <LucideLinkedin size={18} />, href: "https://www.linkedin.com/in/tegar-anugrah-wijaya-606922346/", color: "hover:bg-blue-600" },
-    { icon: <LucideInstagram size={18} />, href: "https://www.instagram.com/tegarannn", color: "hover:bg-pink-600" },
-    { icon: <LucideMessage size={18} />, href: "https://tiktok.com/@tegaranw", color: "hover:bg-slate-800" },
-    { icon: <LucideGithub size={18} />, href: "https://github.com/TegarAnugrahWijayah", color: "hover:bg-gray-700" },
+    { icon: <Linkedin size={18} />, href: "https://www.linkedin.com/in/tegar-anugrah-wijaya-606922346/", color: "hover:bg-blue-600" },
+    { icon: <Instagram size={18} />, href: "https://www.instagram.com/tegarannn", color: "hover:bg-pink-600" },
+    { icon: <MessageCircle size={18} />, href: "https://tiktok.com/@tegaranw", color: "hover:bg-slate-800" },
+    { icon: <Github size={18} />, href: "https://github.com/TegarAnugrahWijayah", color: "hover:bg-gray-700" },
   ]
 
   return (
@@ -163,7 +164,7 @@ export default function Home() {
                 Contact Me
               </a>
               <a href="/cv.pdf" target="_blank" className="px-8 py-3 md:px-10 md:py-4 rounded-xl border border-white/10 bg-white/5 font-bold active:scale-95 transition-all text-sm flex items-center gap-2 hover:bg-white/10">
-                <LucideFile size={18} /> Download CV
+                <FileText size={18} /> Download CV
               </a>
             </div>
           </motion.div>
@@ -176,7 +177,13 @@ export default function Home() {
           <div className="grid md:grid-cols-5 gap-10 items-center">
             <div className="md:col-span-2 order-first"> 
               <div className="relative aspect-square max-w-[280px] md:max-w-none mx-auto rounded-2xl overflow-hidden border border-white/10 group">
-                <Image src="/about.jpeg" alt="Tegar About" fill className="object-cover transition-transform duration-500 group-hover:scale-110" sizes="(max-width: 768px) 280px, 400px" />
+                <Image 
+                  src="/about.jpeg" 
+                  alt="Tegar About" 
+                  fill 
+                  sizes="(max-width: 768px) 280px, 400px"
+                  className="object-cover transition-transform duration-500 group-hover:scale-110" 
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#05050c]/40 to-transparent" />
               </div>
             </div>
@@ -187,16 +194,12 @@ export default function Home() {
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-6 border-t border-white/10">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-                  <LucideMap size={14} className="text-purple-400" />
+                  <MapPin size={14} className="text-purple-400" />
                   <span className="text-[11px] md:text-xs font-medium text-gray-400">Jakarta, ID</span>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-                  <LucideAward size={14} className="text-blue-400" />
+                  <Award size={14} className="text-blue-400" />
                   <span className="text-[11px] md:text-xs font-medium text-gray-400">MTCNA Certified</span>
-                </div>
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-                  <LucideLink size={14} className="text-green-400" />
-                  <span className="text-[11px] md:text-xs font-medium text-gray-400">Open for Projects</span>
                 </div>
               </div>
             </div>
@@ -204,7 +207,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ===== SKILLS / PORTFOLIO ===== */}
+      {/* ===== SKILLS ===== */}
       <section id="skills" className="relative z-10 py-24 px-6 max-w-6xl mx-auto scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Technical Skills</h2>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -212,8 +215,12 @@ export default function Home() {
             <motion.div 
               key={skill} 
               variants={fadeInVariant}
-              whileHover={{ scale: 1.05 }}
-              className="rounded-2xl bg-white/5 border border-white/10 p-6 md:p-10 flex items-center justify-center text-center font-bold text-sm md:text-base transition-all hover:bg-white/10 hover:border-purple-500/30"
+              whileHover={{ 
+                scale: 1.05, 
+                boxShadow: "0px 0px 20px rgba(168, 85, 247, 0.15)",
+                borderColor: "rgba(168, 85, 247, 0.4)"
+              }}
+              className="rounded-2xl bg-white/5 border border-white/10 p-6 md:p-10 flex items-center justify-center text-center font-bold text-sm md:text-base transition-all hover:bg-white/10"
             >
               {skill}
             </motion.div>
@@ -221,7 +228,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* (Sections Experience & Contact sama seperti sebelumnya) */}
+      {/* ===== EXPERIENCE ===== */}
       <section id="experience" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Experience</h2>
         <div className="grid gap-6 md:gap-8">
@@ -230,6 +237,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== CONTACT ===== */}
       <section id="contact" className="relative z-10 py-24 px-6 bg-white/[0.01] border-t border-white/5 scroll-mt-24">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 flex flex-col justify-center items-center md:items-start text-center md:text-left">
@@ -242,7 +250,7 @@ export default function Home() {
               ))}
             </div>
             <div className="inline-flex items-center gap-3 text-purple-400 font-bold bg-purple-500/10 px-6 py-4 rounded-xl border border-purple-500/20 text-sm md:text-base">
-              <LucideMail size={18} /> tegaranw@gmail.com
+              <Mail size={18} /> tegaranw@gmail.com
             </div>
           </motion.div>
           <motion.form initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="space-y-4 bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10">
@@ -253,8 +261,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== FOOTER ===== */}
       <footer className="py-16 px-6 text-center border-t border-white/5 relative z-10">
-        <div className="max-w-6xl mx-auto text-gray-600 text-[10px] tracking-[0.3em] uppercase">
+        <div className="text-gray-600 text-[10px] tracking-[0.3em] uppercase">
           © {new Date().getFullYear()} Tegar Anugrah Wijaya
         </div>
       </footer>
