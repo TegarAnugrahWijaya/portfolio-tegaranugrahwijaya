@@ -1,11 +1,21 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { motion, useScroll, useTransform, Variants } from "framer-motion"
-import { Linkedin, Instagram, Github, MessageCircle, Mail, Award, FileText, MapPin, ExternalLink } from "lucide-react"
+import { 
+  Linkedin, 
+  Instagram, 
+  Github, 
+  MessageCircle, 
+  Mail, 
+  Award, 
+  FileText, 
+  MapPin, 
+  ExternalLink 
+} from "lucide-react"
 
-// ===== ANIMATION VARIANTS (ASLI) =====
+// ===== ANIMATION VARIANTS =====
 const fadeInVariant: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { 
@@ -28,13 +38,15 @@ export default function Home() {
   const glowY = useTransform(scrollY, [0, 500], [0, -30])
   
   const [activeTab, setActiveTab] = useState("Home")
+  const isScrollingRef = useRef(false)
 
-  // ===== FUNGSI AUTO UPDATE NAVBAR SAAT SCROLL =====
+  // ===== AUTO UPDATE NAVBAR ON SCROLL =====
   useEffect(() => {
     const sections = document.querySelectorAll("section[id]");
     
     const observer = new IntersectionObserver(
       (entries) => {
+        if (isScrollingRef.current) return;
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const id = entry.target.getAttribute("id");
@@ -44,11 +56,11 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.4 } // Trigger pas section masuk 40% layar
+      { rootMargin: "-30% 0px -60% 0px", threshold: 0 }
     );
 
     const handleHomeScroll = () => {
-      if (window.scrollY < 200) setActiveTab("Home");
+      if (!isScrollingRef.current && window.scrollY < 150) setActiveTab("Home");
     };
 
     sections.forEach((section) => observer.observe(section));
@@ -59,6 +71,12 @@ export default function Home() {
       window.removeEventListener("scroll", handleHomeScroll);
     };
   }, []);
+
+  const handleNavClick = (name: string) => {
+    setActiveTab(name);
+    isScrollingRef.current = true;
+    setTimeout(() => { isScrollingRef.current = false; }, 800);
+  }
 
   const navLinks = [
     { name: "Home", href: "#" },
@@ -86,14 +104,13 @@ export default function Home() {
       <motion.nav
         initial={{ y: -100, x: "-50%", opacity: 0 }}
         animate={{ y: 0, x: "-50%", opacity: 1 }}
-        style={{ willChange: "transform, opacity" }}
         className="fixed top-5 left-1/2 z-50 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full p-1 flex items-center shadow-2xl w-fit"
       >
         {navLinks.map((link) => (
           <a 
             key={link.name} 
             href={link.href} 
-            onClick={() => setActiveTab(link.name)}
+            onClick={() => handleNavClick(link.name)}
             className={`relative px-4 py-2 transition-colors uppercase tracking-widest z-10 text-[10px] md:text-xs font-bold ${
               activeTab === link.name ? "text-white" : "text-gray-400 hover:text-purple-400"
             }`}
@@ -112,7 +129,7 @@ export default function Home() {
 
       {/* ===== BACKGROUND ===== */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <motion.div style={{ y: glowY, willChange: "transform" }} className="absolute -top-20 -left-20 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-purple-600/10 blur-[80px] md:blur-[160px]" />
+        <motion.div style={{ y: glowY }} className="absolute -top-20 -left-20 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-purple-600/10 blur-[80px] md:blur-[160px]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] md:bg-[size:50px_50px]" />
       </div>
 
@@ -140,10 +157,10 @@ export default function Home() {
               Tegar <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Anugrah</span><br className="hidden md:block" /> Wijaya
             </h1>
             <p className="text-base md:text-xl text-gray-400 max-w-xl mb-10 leading-relaxed">
-              Network Engineer & IT Support who focuses on building reliable and efficient network infrastructure. 
+              Network Engineer & IT Support who focuses on building reliable and efficient network infrastructure.
             </p>
             <div className="flex flex-wrap justify-center md:justify-start gap-4">
-              <a href="#contact" className="px-8 py-3 md:px-10 md:py-4 rounded-xl bg-purple-600 font-bold shadow-lg shadow-purple-600/20 active:scale-95 transition-all text-sm flex items-center gap-2">
+              <a href="#contact" onClick={() => handleNavClick("Contact")} className="px-8 py-3 md:px-10 md:py-4 rounded-xl bg-purple-600 font-bold shadow-lg shadow-purple-600/20 active:scale-95 transition-all text-sm flex items-center gap-2">
                 Contact Me
               </a>
               <a href="/cv.pdf" target="_blank" className="px-8 py-3 md:px-10 md:py-4 rounded-xl border border-white/10 bg-white/5 font-bold active:scale-95 transition-all text-sm flex items-center gap-2 hover:bg-white/10">
@@ -160,7 +177,13 @@ export default function Home() {
           <div className="grid md:grid-cols-5 gap-10 items-center">
             <div className="md:col-span-2 order-first"> 
               <div className="relative aspect-square max-w-[280px] md:max-w-none mx-auto rounded-2xl overflow-hidden border border-white/10 group">
-                <Image src="/about.jpeg" alt="Tegar About" fill className="object-cover transition-transform duration-500 group-hover:scale-110" sizes="(max-width: 768px) 280px, 400px" />
+                <Image 
+                  src="/about.jpeg" 
+                  alt="Tegar About" 
+                  fill 
+                  sizes="(max-width: 768px) 280px, 400px"
+                  className="object-cover transition-transform duration-500 group-hover:scale-110" 
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#05050c]/40 to-transparent" />
               </div>
             </div>
@@ -177,10 +200,6 @@ export default function Home() {
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
                   <Award size={14} className="text-blue-400" />
                   <span className="text-[11px] md:text-xs font-medium text-gray-400">MTCNA Certified</span>
-                </div>
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-                  <ExternalLink size={14} className="text-green-400" />
-                  <span className="text-[11px] md:text-xs font-medium text-gray-400">Open for Projects</span>
                 </div>
               </div>
             </div>
@@ -266,16 +285,8 @@ export default function Home() {
 
       {/* ===== FOOTER ===== */}
       <footer className="py-16 px-6 text-center border-t border-white/5 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <p className="text-purple-400 font-bold tracking-[0.2em] uppercase mb-4 text-[10px] md:text-xs italic">
-            "Connecting the dots, packet by packet."
-          </p>
-          <div className="flex items-center justify-center gap-2 text-gray-500 text-[10px] mb-8">
-            <MapPin size={12} /> Jakarta, Indonesia
-          </div>
-          <div className="text-gray-600 text-[10px] tracking-[0.3em] uppercase">
-            © {new Date().getFullYear()} Tegar Anugrah Wijaya
-          </div>
+        <div className="text-gray-600 text-[10px] tracking-[0.3em] uppercase">
+          © {new Date().getFullYear()} Tegar Anugrah Wijaya
         </div>
       </footer>
     </main>
@@ -302,7 +313,7 @@ function ExperienceCard({ title, company, period, points, images }: { title: str
       <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8">
         {images.map((img, index) => (
           <div key={index} className="relative aspect-square rounded-xl overflow-hidden border border-white/10 bg-white/5 group/img">
-            <Image src={img} alt={`${title} doc ${index}`} fill className="object-cover group-hover/img:scale-110 transition-transform duration-500" />
+            <Image src={img} alt={`${title} doc ${index}`} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
           </div>
         ))}
       </div>
