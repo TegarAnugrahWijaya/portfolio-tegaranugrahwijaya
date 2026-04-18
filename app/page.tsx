@@ -157,7 +157,7 @@ export default function Home() {
               Tegar <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Anugrah</span><br className="hidden md:block" /> Wijaya
             </h1>
             <p className="text-base md:text-xl text-gray-400 max-w-xl mb-10 leading-relaxed">
-              Network Engineer & IT Support yang fokus pada pembangunan infrastruktur jaringan handal dan efisien.
+              Network Engineer & IT Support who focuses on building reliable and efficient network infrastructure.
             </p>
             <div className="flex flex-wrap justify-center md:justify-start gap-4">
               <a href="#contact" onClick={() => handleNavClick("Contact")} className="px-8 py-3 md:px-10 md:py-4 rounded-xl bg-purple-600 font-bold shadow-lg shadow-purple-600/20 active:scale-95 transition-all text-sm flex items-center gap-2">
@@ -225,6 +225,28 @@ export default function Home() {
               {skill}
             </motion.div>
           ))}
+        </motion.div>
+      </section>
+
+      {/* ===== CERTIFICATIONS ===== */}
+      <section id="certifications" className="relative z-10 py-24 px-6 max-w-6xl mx-auto border-t border-white/5 scroll-mt-24">
+        <h2 className="text-2xl md:text-3xl font-bold mb-10 uppercase tracking-widest text-center md:text-left">Certifications</h2>
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInVariant} className="bg-white/5 border border-white/10 rounded-3xl p-4 md:p-6 max-w-2xl hover:border-purple-500/30 transition-all group">
+          <a href="/cert-mtcna.jpg" target="_blank" className="relative block overflow-hidden rounded-xl border border-white/10 mb-6 cursor-zoom-in group/cert">
+            <img src="/cert-mtcna.jpg" alt="MTCNA Certificate" className="w-full h-auto block group-hover/cert:scale-[1.02] transition-transform duration-500" />
+            <div className="absolute inset-0 bg-purple-600/0 group-hover/cert:bg-purple-600/5 transition-colors flex items-center justify-center opacity-0 group-hover/cert:opacity-100">
+               <div className="bg-black/60 p-3 rounded-full backdrop-blur-md border border-white/20">
+                 <ExternalLink size={20} />
+               </div>
+            </div>
+          </a>
+          <div className="px-2">
+            <div className="flex items-center gap-3 mb-2">
+              <Award className="text-purple-500" size={24} />
+              <h3 className="text-xl md:text-2xl font-bold text-white uppercase tracking-tight">MikroTik Certified Network Associate</h3>
+            </div>
+            <p className="text-purple-400 font-medium ">Issued by MikroTik • MikroTik Academy</p>
+          </div>
         </motion.div>
       </section>
 
